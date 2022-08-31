@@ -99,9 +99,52 @@ function createApp(name, useYarn) {
 
   const packageJson = {
     name: appName,
-    version: "0.1.0",
+    version: "1.0.0",
+    description: "",
+    author: "",
+    license: "",
     private: false,
+    exports: {
+      "./package.json": "./package.json",
+      ".": {
+        // types: "./types/index.d.ts",
+        import: "./esm/index.js",
+        default: "./lib/index.js",
+      },
+      "./*": {
+        // types: "./types/*.d.ts",
+        import: "./esm/*.js",
+        default: "./lib/*.js",
+      },
+    },
+    files: [
+      "esm/",
+      "lib/",
+      // , "types/"
+    ],
+    main: "lib/index.js",
+    module: "esm/index.js",
+    peerDependencies: {
+      react: ">=17",
+    },
+    sideEffects: false,
+    babel: {
+      presets: ["@babel/preset-react"],
+    },
+    scripts: {
+      build: "yarn build:lib && yarn build:esm",
+      "build:esm":
+        "babel src --out-dir esm --extensions '.js,.jsx,.ts,.tsx' --copy-files --delete-dir-on-start",
+      "build:lib":
+        "babel src --out-dir lib --extensions '.js,.jsx,.ts,.tsx' --copy-files --delete-dir-on-start",
+    },
+    devDependencies: {
+      "@babel/cli": "^7.18.10",
+      "@babel/core": "^7.18.13",
+      "@babel/preset-react": "^7.18.6",
+    },
   };
+
   fs.writeFileSync(
     path.join(root, "package.json"),
     JSON.stringify(packageJson, null, 2) + os.EOL
