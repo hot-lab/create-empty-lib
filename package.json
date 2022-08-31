@@ -3,6 +3,7 @@
   "version": "0.1.0-beta",
   "description": "",
   "license": "MIT",
+  "private": false,
   "engines": {
     "node": ">=14"
   },
